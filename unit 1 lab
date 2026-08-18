@@ -1,0 +1,250 @@
+#1.BFS(breadth first search)
+from collections import deque
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+def bfs(graph, start):
+    visited = []
+    queue = deque()
+    visited.append(start)
+    queue.append(start)
+    while queue:
+        node = queue.popleft()
+        print(node, end=" ")
+        for neighbour in graph[node]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
+print("BFS Traversal:")
+bfs(graph, 'A')
+#2.DFS(depth first search)--------------------------------------
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': [],
+    'F': []
+}
+visited = []
+def dfs(node):
+    if node not in visited:
+        print(node, end=" ")
+        visited.append(node)
+
+        for neighbour in graph[node]:
+            dfs(neighbour)
+print("\nDFS Traversal:")
+dfs('A')
+
+#3.TSP(travelling sales man problem)------------------------------
+from itertools import permutations
+graph = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+cities = [1, 2, 3]
+min_cost = float('inf')
+for path in permutations(cities):
+    cost = 0
+    current = 0
+    for city in path:
+        cost += graph[current][city]
+        current = city
+    cost += graph[current][0]
+    if cost < min_cost:
+        min_cost = cost
+        best_path = path
+print("\nMinimum Cost:", min_cost)
+print("Best Path:", (0,) + best_path + (0,))
+
+#4.A*Algorithm-----------------------------------------------------
+graph = {
+    'A': [('B', 1), ('C', 3)],
+    'B': [('D', 3), ('E', 6)],
+    'C': [('F', 5)],
+    'D': [],
+    'E': [('G', 2)],
+    'F': [('G', 2)],
+    'G': []
+}
+heuristic = {
+    'A': 7,
+    'B': 6,
+    'C': 4,
+    'D': 3,
+    'E': 2,
+    'F': 1,
+    'G': 0
+}
+def astar(start, goal):
+    open_list = [(start, 0)]
+    visited = []
+    while open_list:
+        # Sort based on f = g + h
+        open_list.sort(key=lambda x: x[1] + heuristic[x[0]])
+        current, cost = open_list.pop(0)
+        if current == goal:
+            print("Goal Reached:", goal)
+            return
+        visited.append(current)
+        for neighbour, weight in graph[current]:
+            if neighbour not in visited:
+                open_list.append((neighbour, cost + weight))
+astar('A','G')
+
+# 5.Missionaries and Cannibals Problem-------------------------------
+solution = [
+    (3, 3, "Left"),
+    (3, 1, "Right"),
+    (3, 2, "Left"),
+    (3, 0, "Right"),
+    (3, 1, "Left"),
+    (1, 1, "Right"),
+    (2, 2, "Left"),
+    (0, 2, "Right"),
+    (0, 3, "Left"),
+    (0, 1, "Right"),
+    (1, 1, "Left"),
+    (0, 0, "Right")
+]
+print("Missionaries and Cannibals Solution:")
+for state in solution:
+    print("Missionaries:", state[0],
+          "| Cannibals:", state[1],
+          "| Boat:", state[2])
+# 6.Vacuum Cleaner Problem--------------------------------------------
+rooms = {
+    "A": "Dirty",
+    "B": "Dirty"
+}
+print("Initial Room Status:")
+print(rooms)
+for room in rooms:
+    if rooms[room] == "Dirty":
+        print("Vacuum is in Room", room)
+        print("Room is Dirty")
+        print("Cleaning Room", room)
+        rooms[room] = "Clean"
+    else:
+        print("Room", room, "is already Clean")
+print("\nFinal Room Status:")
+print(rooms)
+
+#7.Water Jug Problem----------------------------------------------------
+
+jug4 = 0
+jug3 = 0
+print("Initial State:")
+print("4L Jug =", jug4, "| 3L Jug =", jug3)
+jug4 = 4
+print("Fill 4L Jug")
+print("4L =", jug4, "| 3L =", jug3)
+jug3 = 3
+jug4 = 1
+print("Pour 4L -> 3L")
+print("4L =", jug4, "| 3L =", jug3)
+jug3 = 0
+print("Empty 3L Jug")
+print("4L =", jug4, "| 3L =", jug3)
+jug3 = jug4
+jug4 = 0
+print("Pour remaining water")
+print("4L =", jug4, "| 3L =", jug3)
+jug4 = 4
+print("Fill 4L Jug again")
+print("4L =", jug4, "| 3L =", jug3)
+jug4 = 2
+jug3 = 3
+print("Pour into 3L Jug")
+print("4L =", jug4, "| 3L =", jug3)
+print("Goal Achieved: 2 Liters in 4L Jug")
+
+#8.Crypt-Arithmetic Problem-----------------------------------------------
+from itertools import permutations
+letters = ('S', 'E', 'N', 'D', 'M', 'O', 'R', 'Y')
+digits = range(10)
+for p in permutations(digits, len(letters)):
+    S, E, N, D, M, O, R, Y = p
+    if S == 0 or M == 0:
+        continue
+    send = 1000*S + 100*E + 10*N + D
+    more = 1000*M + 100*O + 10*R + E
+    money = 10000*M + 1000*O + 100*N + 10*E + Y
+    if send + more == money:
+        print("SEND =", send)
+        print("MORE =", more)
+        print("MONEY =", money)
+        break
+#9 puzzle 8----------------------------------------------------------------
+start = [1, 2, 3,
+         4, 0, 6,
+         7, 5, 8]
+goal = [1, 2, 3,
+        4, 5, 6,
+        7, 8, 0]
+states = [start]
+visited = [start]
+while states:
+    current = states.pop(0)
+    if current == goal:
+        print("Puzzle Solved!")
+        print(current)
+        break
+    zero = current.index(0)
+    row = zero // 3
+    col = zero % 3
+    moves = []
+    if row > 0:
+        moves.append(zero - 3)
+    if row < 2:
+        moves.append(zero + 3)
+    if col > 0:
+        moves.append(zero - 1)
+    if col < 2:
+        moves.append(zero + 1)
+    for move in moves:
+        new_state = current.copy()
+        new_state[zero] = new_state[move]
+        new_state[move] = 0
+        if new_state not in visited:
+            visited.append(new_state)
+            states.append(new_state)
+else:
+    print("No solution")
+#10 (8-queens problem)-----------------------------------------------------------
+n = 8
+board = [-1] * n
+def safe(row, col):
+    for i in range(row):
+        if board[i] == col:
+            return False
+        if abs(board[i] - col) == abs(i - row):
+            return False
+    return True
+def solve(row):
+    if row == n:
+        for i in range(n):
+            for j in range(n):
+                if board[i] == j:
+                    print("Q", end=" ")
+                else:
+                    print(".", end=" ")
+            print()
+        print()
+        return True
+    for col in range(n):
+        if safe(row, col):
+            board[row] = col
+            if solve(row + 1):
+                return True
+            board[row] = -1
+    return False
+solve(0)
